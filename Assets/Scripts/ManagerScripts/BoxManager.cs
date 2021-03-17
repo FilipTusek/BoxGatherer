@@ -40,17 +40,11 @@ public class BoxManager : MonoBehaviour
 
     private void SpawnBox()
     {
-        var position = _spawnBounds.position;
-        var localScale = _spawnBounds.localScale;
-        var minMaxPosX = new Vector2(position.x - localScale.x / 2, position.x + localScale.x / 2);
-        var minMaxPosY = new Vector2(position.y - localScale.y / 2, position.y + localScale.y / 2);
-        var spawnPos = new Vector2(Random.Range(minMaxPosX.x, minMaxPosX.y), Random.Range(minMaxPosY.x, minMaxPosY.y));
-
         var boxTypeIndex = Random.Range(0, Enum.GetValues(typeof(Box.BoxType)).Length);
         Box.BoxType boxType = (Box.BoxType) boxTypeIndex;
         var box = GetBox();
         box.SetType(boxType, boxType == Box.BoxType.Blue ? _blueColor : _redColor);
-        //Position the box
+        box.transform.position = GetSpawnPosition();
     }
 
     private void CollectBox(Box box)
@@ -64,5 +58,14 @@ public class BoxManager : MonoBehaviour
     private Box GetBox()
     {
         return _boxPool.Count == 0 ? Instantiate(_boxPrefab, _boxParent).GetComponent<Box>() : _boxPool.Dequeue();
+    }
+
+    private Vector2 GetSpawnPosition()
+    {
+        var position = _spawnBounds.position;
+        var localScale = _spawnBounds.localScale;
+        var minMaxPosX = new Vector2(position.x - localScale.x / 2, position.x + localScale.x / 2);
+        var minMaxPosY = new Vector2(position.y - localScale.y / 2, position.y + localScale.y / 2);
+        return new Vector2(Random.Range(minMaxPosX.x, minMaxPosX.y), Random.Range(minMaxPosY.x, minMaxPosY.y));
     }
 }
