@@ -51,18 +51,16 @@ namespace GathererScripts
         private void Move()
         {
             if (GetDistanceToTarget() < _breakingDistance) {
-                if (_rigidbody.velocity.magnitude > 0.1f) {
+                if (_rigidbody.velocity.magnitude > 0.1f)
                     _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, Vector2.zero, Time.fixedDeltaTime * _acceleration);
-                }
                 else {
                     _rigidbody.velocity = Vector2.zero;
                     _isMoving = false;
                     EventManager.OnGathererTargetReached.OnEventRaised?.Invoke();
                 }
             }
-            else {
+            else 
                 _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, GetDirectionTowardsTarget() * _maxVelocity, Time.fixedDeltaTime * _acceleration);
-            }
         }
 
         private void Rotate()
@@ -70,9 +68,8 @@ namespace GathererScripts
             if (_hasCorrectFacing) return;
             if (GetDirectionTowardsTarget().x < 0) {
                 print("TARGET LEFT");
-                if (transform.eulerAngles.y < 180 + _rotationSnapMargin) {
+                if (transform.eulerAngles.y < 180 + _rotationSnapMargin)
                     transform.Rotate(Vector2.up * (Time.fixedDeltaTime * _rotationSpeed));
-                }
                 else {
                     transform.eulerAngles = Vector2.up * 180;
                     _hasCorrectFacing = true;
@@ -80,9 +77,8 @@ namespace GathererScripts
             }
             else {
                 print("TARGET RIGHT");
-                if (transform.eulerAngles.y > _rotationSnapMargin || transform.eulerAngles.y > 360 - _rotationSnapMargin) {
+                if (transform.eulerAngles.y > _rotationSnapMargin || transform.eulerAngles.y > 360 - _rotationSnapMargin)
                     transform.Rotate(Vector2.up * (Time.fixedDeltaTime * -_rotationSpeed));
-                }
                 else {
                     transform.eulerAngles = Vector2.zero;
                     _hasCorrectFacing = true;

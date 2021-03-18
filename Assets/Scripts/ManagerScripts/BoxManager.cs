@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Scripts.Events;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,25 +18,40 @@ public class BoxManager : MonoBehaviour
 
     private Queue<Box> _boxPool = new Queue<Box>();
 
+    private int _maxNumberOfBoxes = 10;
+    private int _numBoxesToSpawn;
+
     private void OnEnable()
     {
-        EventManager.OnSpawnBox.OnEventRaised += SpawnBox;
+        EventManager.OnBoxNumberSet.OnEventRaised += AddBoxesToSpawn;
+        EventManager.OnSpawnBoxes.OnEventRaised += SpawnBoxes;
         EventManager.OnCollectBox.OnEventRaised += CollectBox;
     }
 
     private void OnDisable()
     {
-        EventManager.OnSpawnBox.OnEventRaised -= SpawnBox;
+        EventManager.OnBoxNumberSet.OnEventRaised -= AddBoxesToSpawn;
+        EventManager.OnSpawnBoxes.OnEventRaised -= SpawnBoxes;
         EventManager.OnCollectBox.OnEventRaised -= CollectBox;
     }
 
     private void Start()
     {
         _spawnBounds.GetComponent<SpriteRenderer>().enabled = false;
+    }
 
-        for (int i = 0; i < 5; i++) {
-            EventManager.OnSpawnBox.OnEventRaised?.Invoke();
+    private void AddBoxesToSpawn(int numBoxes, TMP_Text text)
+    {
+        if (_numBoxesToSpawn + numBoxes <= _maxNumberOfBoxes) {
+            _numBoxesToSpawn += numBoxes;
+            text.text = "" + _numBoxesToSpawn;
         }
+    }
+
+    private void SpawnBoxes()
+    {
+        for (int i = 0; i < _numBoxesToSpawn; i++)
+            SpawnBox();
     }
 
     private void SpawnBox()
@@ -49,8 +65,6 @@ public class BoxManager : MonoBehaviour
 
     private void CollectBox(Box box)
     {
-        //Play animation??
-
         box.gameObject.SetActive(false);
         _boxPool.Enqueue(box);
     }
