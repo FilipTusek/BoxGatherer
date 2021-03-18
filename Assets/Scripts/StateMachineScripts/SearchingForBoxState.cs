@@ -10,6 +10,7 @@ namespace StateMachineScripts
         {
             base.Enter();
             _gathererAI.SetTargetBox();
+            _gathererAI.SetTargetContainer();
         }
     }
 }

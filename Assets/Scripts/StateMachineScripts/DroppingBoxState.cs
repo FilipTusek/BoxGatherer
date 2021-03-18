@@ -7,6 +7,7 @@
         public override void Enter()
         {
             base.Enter();
+            _gathererAI.DropTheBox();
         }
     }
 }

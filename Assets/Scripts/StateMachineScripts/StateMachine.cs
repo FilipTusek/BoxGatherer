@@ -14,6 +14,7 @@ namespace StateMachineScripts
 
         public void ChangeState(State newState)
         {
+            Debug.Log(newState.ToString());
             CurrentState = newState;
             newState.Enter();
         }

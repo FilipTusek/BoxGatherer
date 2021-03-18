@@ -14,7 +14,7 @@ TagManager:
   - 
   - 
   - Box
-  - 
+  - Gatherer
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Gatherer
+    uniqueID: 3075597717
+    locked: 0
+  - name: Box
+    uniqueID: 2132655827
     locked: 0

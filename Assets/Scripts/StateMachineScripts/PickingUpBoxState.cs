@@ -4,9 +4,11 @@
     {
         public PickingUpBoxState(GathererAI gathererAI, StateMachine stateMachine) : base(gathererAI, stateMachine) { }
 
-        public override void PhysicsUpdate()
+        public override void Enter()
         {
-            base.PhysicsUpdate();
+            base.Enter();
+            
+            _gathererAI.PickUpBox();
         }
     }
 }

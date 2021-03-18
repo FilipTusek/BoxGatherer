@@ -1,4 +1,6 @@
-﻿namespace StateMachineScripts
+﻿using Unity.Collections.LowLevel.Unsafe;
+
+namespace StateMachineScripts
 {
     public abstract class State
     {
@@ -17,6 +19,11 @@
         }
         
         public virtual void PhysicsUpdate()
+        {
+            
+        }
+
+        public virtual void Exit()
         {
             
         }
