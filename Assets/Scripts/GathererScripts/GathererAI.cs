@@ -37,15 +37,17 @@ public class GathererAI : MonoBehaviour
     public MovingTowardsContainerState MovingTowardsContainer{ get; set; }
     public DroppingBoxState DroppingBoxState{ get; set; }
     
+    public bool IsCarryingBox { get; private set; } 
+    
     private void OnEnable()
     {
-        EventManager.OnGathererActiveStatusChanged.OnEventRaised += ToggleGatheringState;
+        EventManager.OnGathererActiveStatusChanged.OnEventRaised += ChangeGatheringState;
         EventManager.OnGathererTargetReached.OnEventRaised += ExitCurrentState;
     }
 
     private void OnDisable()
     {
-        EventManager.OnGathererActiveStatusChanged.OnEventRaised -= ToggleGatheringState;
+        EventManager.OnGathererActiveStatusChanged.OnEventRaised -= ChangeGatheringState;
         EventManager.OnGathererTargetReached.OnEventRaised -= ExitCurrentState;
     }
 
@@ -65,7 +67,7 @@ public class GathererAI : MonoBehaviour
         StateMachine.Initialize(IdleState);
     }
 
-    private void ToggleGatheringState(bool state)
+    private void ChangeGatheringState(bool state)
     {
         if(state)
             StateMachine.ChangeState(SearchingForBox);
@@ -108,6 +110,7 @@ public class GathererAI : MonoBehaviour
 
     public void SetTargetContainer()
     {
+        if (TargetBox == null) return;
         TargetContainer = TargetBox.TypeOfBox == Box.BoxType.Blue ? _blueContainer : _redContainer;
     }
 
@@ -117,6 +120,7 @@ public class GathererAI : MonoBehaviour
         TargetBox.Rigidbody.simulated = false;
         var boxTransform = TargetBox.Rigidbody.transform;
         boxTransform.localPosition = new Vector3(boxTransform.localPosition.x, 0);
+        IsCarryingBox = true;
         StateMachine.ChangeState(MovingTowardsContainer);
     }
 
@@ -127,6 +131,8 @@ public class GathererAI : MonoBehaviour
         boxTransform.position = TargetContainer.transform.position + Vector3.up * (TargetContainer.localScale.y + 3 * boxTransform.localScale.y);
         TargetBox.Rigidbody.simulated = true;
         TargetBox.gameObject.layer = LayerMask.NameToLayer("Default");
+        TargetBox = null;
+        IsCarryingBox = false;
         StateMachine.ChangeState(SearchingForBox);
     }
 

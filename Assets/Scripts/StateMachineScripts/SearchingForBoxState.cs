@@ -9,6 +9,11 @@ namespace StateMachineScripts
         public override void Enter()
         {
             base.Enter();
+            if (_gathererAI.IsCarryingBox) {
+                _stateMachine.ChangeState(_gathererAI.MovingTowardsContainer);
+                return;
+            }
+
             _gathererAI.SetTargetBox();
             _gathererAI.SetTargetContainer();
         }

@@ -67,7 +67,6 @@ namespace GathererScripts
         {
             if (_hasCorrectFacing) return;
             if (GetDirectionTowardsTarget().x < 0) {
-                print("TARGET LEFT");
                 if (transform.eulerAngles.y < 180 + _rotationSnapMargin)
                     transform.Rotate(Vector2.up * (Time.fixedDeltaTime * _rotationSpeed));
                 else {
@@ -76,7 +75,6 @@ namespace GathererScripts
                 }
             }
             else {
-                print("TARGET RIGHT");
                 if (transform.eulerAngles.y > _rotationSnapMargin || transform.eulerAngles.y > 360 - _rotationSnapMargin)
                     transform.Rotate(Vector2.up * (Time.fixedDeltaTime * -_rotationSpeed));
                 else {

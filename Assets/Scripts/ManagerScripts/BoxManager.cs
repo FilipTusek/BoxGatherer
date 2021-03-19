@@ -20,6 +20,8 @@ public class BoxManager : MonoBehaviour
 
     private int _maxNumberOfBoxes = 10;
     private int _numBoxesToSpawn;
+    private int _numBoxesToCollect;
+    private int _numGatheredBoxes = 0;
 
     private void OnEnable()
     {
@@ -42,14 +44,18 @@ public class BoxManager : MonoBehaviour
 
     private void AddBoxesToSpawn(int numBoxes, TMP_Text text)
     {
-        if (_numBoxesToSpawn + numBoxes <= _maxNumberOfBoxes) {
+        if (_numBoxesToSpawn + numBoxes <= _maxNumberOfBoxes && _numBoxesToSpawn + numBoxes > 0) {
             _numBoxesToSpawn += numBoxes;
             text.text = "" + _numBoxesToSpawn;
+        }
+        else {
+            Debug.Log("Number of boxes must be between 1 and " + _maxNumberOfBoxes);
         }
     }
 
     private void SpawnBoxes()
     {
+        _numBoxesToCollect = _numBoxesToSpawn;
         for (int i = 0; i < _numBoxesToSpawn; i++)
             SpawnBox();
     }
@@ -60,13 +66,17 @@ public class BoxManager : MonoBehaviour
         Box.BoxType boxType = (Box.BoxType) boxTypeIndex;
         var box = GetBox();
         box.SetType(boxType, boxType == Box.BoxType.Blue ? _blueColor : _redColor);
+        box.transform.SetParent(_boxParent);
         box.transform.position = GetSpawnPosition();
+        box.gameObject.SetActive(true);
     }
 
     private void CollectBox(Box box)
     {
         box.gameObject.SetActive(false);
         _boxPool.Enqueue(box);
+        _numGatheredBoxes++;
+        CheckIfAllBoxesCollected();
     }
 
     private Box GetBox()
@@ -81,5 +91,13 @@ public class BoxManager : MonoBehaviour
         var minMaxPosX = new Vector2(position.x - localScale.x / 2, position.x + localScale.x / 2);
         var minMaxPosY = new Vector2(position.y - localScale.y / 2, position.y + localScale.y / 2);
         return new Vector2(Random.Range(minMaxPosX.x, minMaxPosX.y), Random.Range(minMaxPosY.x, minMaxPosY.y));
+    }
+
+    private void CheckIfAllBoxesCollected()
+    {
+        if (_numGatheredBoxes == _numBoxesToCollect) {
+            EventManager.OnAllBoxesCollected.OnEventRaised?.Invoke();
+            _numGatheredBoxes = 0;
+        }
     }
 }
