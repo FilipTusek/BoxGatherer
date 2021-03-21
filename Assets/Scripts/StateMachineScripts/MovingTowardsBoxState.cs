@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using GathererScripts;
+using UnityEngine;
+using Utils.Events;
 
 namespace StateMachineScripts
 {
@@ -10,12 +12,18 @@ namespace StateMachineScripts
         {
             base.Enter();
             _gathererAI.GathererMovement.GoTo(_gathererAI.TargetBox.transform.position);
+            EventManager.OnGathererTargetReached.OnEventRaised += GoToNextState;
         }
 
         public override void Exit()
         {
             base.Exit();
-            _stateMachine.ChangeState(_gathererAI.PickingUpBox);
+            EventManager.OnGathererTargetReached.OnEventRaised -= GoToNextState;
+        }
+
+        private void GoToNextState()
+        {
+            _stateMachine.ChangeState(_stateMachine.PickingUpBox);
         }
     }
 }

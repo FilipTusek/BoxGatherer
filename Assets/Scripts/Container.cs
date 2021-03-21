@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Scripts.Events;
-using UnityEngine;
+﻿using UnityEngine;
+using Utils.Events;
 
 public class Container : MonoBehaviour
 {

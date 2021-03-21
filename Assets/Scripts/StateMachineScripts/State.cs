@@ -1,4 +1,5 @@
-﻿using Unity.Collections.LowLevel.Unsafe;
+﻿using GathererScripts;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace StateMachineScripts
 {
@@ -14,11 +15,6 @@ namespace StateMachineScripts
         }
         
         public virtual void Enter()
-        {
-            
-        }
-        
-        public virtual void PhysicsUpdate()
         {
             
         }

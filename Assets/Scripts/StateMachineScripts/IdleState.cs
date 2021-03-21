@@ -1,4 +1,6 @@
-﻿namespace StateMachineScripts
+﻿using GathererScripts;
+
+namespace StateMachineScripts
 {
     public class IdleState : State
     {

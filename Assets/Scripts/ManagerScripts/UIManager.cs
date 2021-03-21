@@ -1,8 +1,7 @@
-﻿using System;
-using Scripts.Events;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils.Events;
 
 namespace ManagerScripts
 {
@@ -10,20 +9,26 @@ namespace ManagerScripts
     {
         [SerializeField] private TMP_Text _numberOfBoxesText;
         [SerializeField] private Button _spawnBoxesButton;
+        [SerializeField] private Button _startGatheringButton;
 
         private void OnEnable()
         {
             EventManager.OnAllBoxesCollected.OnEventRaised += EnableBoxSpawningButtonInteraction;
+            EventManager.OnAllBoxesCollected.OnEventRaised += DisableStartGatheringButtonInteraction;
+            EventManager.OnAllBoxesLanded.OnEventRaised += EnableStartGatheringButtonInteraction;
         }
 
         private void OnDisable()
         {
             EventManager.OnAllBoxesCollected.OnEventRaised -= EnableBoxSpawningButtonInteraction;
+            EventManager.OnAllBoxesCollected.OnEventRaised -= DisableStartGatheringButtonInteraction;
+            EventManager.OnAllBoxesLanded.OnEventRaised -= EnableStartGatheringButtonInteraction;
         }
 
         private void Start()
         {
             AddNumberOfBoxesToSpawn(5);
+            DisableStartGatheringButtonInteraction();
         }
 
         public void StartGathering()
@@ -50,6 +55,16 @@ namespace ManagerScripts
         private void EnableBoxSpawningButtonInteraction()
         {
             _spawnBoxesButton.interactable = true;
+        }
+
+        private void DisableStartGatheringButtonInteraction()
+        {
+            _startGatheringButton.interactable = false;
+        }
+
+        private void EnableStartGatheringButtonInteraction()
+        {
+            _startGatheringButton.interactable = true;
         }
     }
 }

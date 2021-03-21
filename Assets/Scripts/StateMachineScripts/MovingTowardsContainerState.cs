@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using GathererScripts;
+using UnityEngine;
 using UnityEngine.UIElements;
+using Utils.Events;
 
 namespace StateMachineScripts
 {
@@ -10,16 +12,27 @@ namespace StateMachineScripts
         public override void Enter()
         {
             base.Enter();
-            var container = _gathererAI.TargetContainer;
-            var containerPosition = container.position;
-            var targetPosition = containerPosition - (containerPosition - _gathererAI.transform.position).normalized.x * new Vector3(container.localScale.x / 2f, 0, 0);
-            _gathererAI.GathererMovement.GoTo(targetPosition);
+            MoveTowardsTargetContainer();
+            EventManager.OnGathererTargetReached.OnEventRaised += GoToNextState;
         }
 
         public override void Exit()
         {
             base.Exit();
-            _stateMachine.ChangeState(_gathererAI.DroppingBoxState);
+            EventManager.OnGathererTargetReached.OnEventRaised -= GoToNextState;
+        }
+
+        private void GoToNextState()
+        {
+            _stateMachine.ChangeState(_stateMachine.DroppingBoxState);
+        }
+
+        private void MoveTowardsTargetContainer()
+        {
+            var container = _gathererAI.TargetContainer;
+            var containerPosition = container.position;
+            var targetPosition = containerPosition - (containerPosition - _gathererAI.transform.position).normalized.x * new Vector3(container.localScale.x / 2f, 0, 0);
+            _gathererAI.GathererMovement.GoTo(targetPosition);
         }
     }
 }

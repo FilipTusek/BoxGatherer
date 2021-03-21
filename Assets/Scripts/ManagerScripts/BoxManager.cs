@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Scripts.Events;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
+using Utils.Events;
 using Random = UnityEngine.Random;
 
 public class BoxManager : MonoBehaviour
@@ -22,12 +20,14 @@ public class BoxManager : MonoBehaviour
     private int _numBoxesToSpawn;
     private int _numBoxesToCollect;
     private int _numGatheredBoxes = 0;
+    private int _numBoxesLanded;
 
     private void OnEnable()
     {
         EventManager.OnBoxNumberSet.OnEventRaised += AddBoxesToSpawn;
         EventManager.OnSpawnBoxes.OnEventRaised += SpawnBoxes;
         EventManager.OnCollectBox.OnEventRaised += CollectBox;
+        EventManager.OnBoxLanded.OnEventRaised += AddToLandedBoxes;
     }
 
     private void OnDisable()
@@ -35,6 +35,7 @@ public class BoxManager : MonoBehaviour
         EventManager.OnBoxNumberSet.OnEventRaised -= AddBoxesToSpawn;
         EventManager.OnSpawnBoxes.OnEventRaised -= SpawnBoxes;
         EventManager.OnCollectBox.OnEventRaised -= CollectBox;
+        EventManager.OnBoxLanded.OnEventRaised -= AddToLandedBoxes;
     }
 
     private void Start()
@@ -98,6 +99,18 @@ public class BoxManager : MonoBehaviour
         if (_numGatheredBoxes == _numBoxesToCollect) {
             EventManager.OnAllBoxesCollected.OnEventRaised?.Invoke();
             _numGatheredBoxes = 0;
+            _numBoxesLanded = 0;
         }
+    }
+
+    private void AddToLandedBoxes()
+    {
+        _numBoxesLanded++;
+        CheckIfAllBoxesLanded();
+    }
+
+    private void CheckIfAllBoxesLanded()
+    {
+        if (_numBoxesLanded == _numBoxesToCollect) EventManager.OnAllBoxesLanded.OnEventRaised?.Invoke();
     }
 }

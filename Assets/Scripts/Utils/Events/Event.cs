@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 
-namespace Filip.Utils
+namespace Utils.Events
 {
     public class Event
     {

@@ -1,6 +1,5 @@
-﻿using System;
-using Scripts.Events;
-using UnityEngine;
+﻿using UnityEngine;
+using Utils.Events;
 
 namespace GathererScripts
 {

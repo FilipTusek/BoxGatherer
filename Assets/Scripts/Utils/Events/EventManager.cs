@@ -1,15 +1,16 @@
-﻿using Filip.Utils;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using Event = Filip.Utils.Event;
+using Event = Utils.Events;
 
-namespace Scripts.Events
+namespace Utils.Events
 {
     public class EventManager : MonoBehaviour
     {
         public static readonly Event OnSpawnBoxes = new Event();
         public static readonly Event OnGathererTargetReached = new Event();
         public static readonly Event OnAllBoxesCollected = new Event();
+        public static readonly Event OnBoxLanded = new Event();
+        public static readonly Event OnAllBoxesLanded = new Event();
         
         public static readonly EventSingle<bool> OnGathererActiveStatusChanged = new EventSingle<bool>();
         public static readonly EventSingle<Box> OnCollectBox = new EventSingle<Box>();
