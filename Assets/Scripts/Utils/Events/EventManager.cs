@@ -4,7 +4,7 @@ using Event = Utils.Events;
 
 namespace Utils.Events
 {
-    public class EventManager : MonoBehaviour
+    public class EventManager
     {
         public static readonly Event OnSpawnBoxes = new Event();
         public static readonly Event OnGathererTargetReached = new Event();
